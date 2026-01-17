@@ -6,19 +6,19 @@ const router = express.Router();
 
 router.post("/mogul", async (req, res) => {
   try {
-    const { uid, mogul, message, context } = req.body;
-    const memory = await getLessonMemory(uid);
+    const { mogul, message } = req.body;
 
-    const reply = await chatAgent({
+    const reply = await chatWithMogul({
       mogul,
       message,
-      memory,
-      context,
     });
 
-    res.json({ message: reply });
-  } catch (e) {
-    res.status(500).json({ message: "AI unavailable right now." });
+    res.json({ reply });
+  } catch (err) {
+    console.error("Chat error:", err.message);
+    res.status(500).json({
+      error: err.message,
+    });
   }
 });
 

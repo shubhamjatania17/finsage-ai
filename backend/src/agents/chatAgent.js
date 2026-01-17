@@ -1,29 +1,30 @@
-import { callGemini } from "../services/geminiService.js";
+import { runGemini } from "../services/geminiService.js";
 
-export async function chatAgent({
-  mogul,
-  message,
-  memory,
-  context,
-}) {
+export async function chatWithMogul({ mogul, message, context }) {
+  if (!mogul || !message) {
+    throw new Error("Missing mogul or message");
+  }
+
   const prompt = `
-You are ${mogul}, acting as a calm, long-term financial mentor.
+You are ${mogul}, one of the greatest financial thinkers.
 
-User memory:
-${JSON.stringify(memory)}
+Speak ONLY in the style, tone, and philosophy of ${mogul}.
+Be direct, opinionated, and practical.
+Avoid generic AI language.
+Do NOT say you are an AI.
 
-Context (current page data):
-${JSON.stringify(context)}
-
-Rules:
-- No hype
-- No slang
-- Practical advice
-- Think long-term
-
-User says:
+User question:
 "${message}"
+
+Context (if any):
+${context || "None"}
+
+Answer:
 `;
 
-  return await callGemini(prompt, { temperature: 0.7 });
+  const response = await runGemini(prompt);
+
+  console.log("🧠 Gemini reply:", response);
+
+  return response;
 }
