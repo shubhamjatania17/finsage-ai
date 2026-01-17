@@ -1,16 +1,17 @@
 import React from "react";
-import { analyze } from "../services/api";
-import { auth } from "../firebase";
 
 export default function Expenses() {
-  const run = async () => {
-    const token = await auth.currentUser.getIdToken();
-    const res = await analyze(
-      { expenses: [{ category: "Food", amount: 4000 }] },
-      token
-    );
-    alert(res.expenseInsight);
-  };
+  return (
+    <div className="main">
+      <h1>Expenses</h1>
 
-  return <button onClick={run}>Analyze Expenses</button>;
+      <div className="card">
+        <ul>
+          <li>🍔 Food – ₹12,000</li>
+          <li>🚕 Transport – ₹6,000</li>
+          <li>📦 Subscriptions – ₹4,000</li>
+        </ul>
+      </div>
+    </div>
+  );
 }

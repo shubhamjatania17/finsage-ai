@@ -4,20 +4,21 @@ import { auth, provider } from "../firebase";
 
 export default function Login() {
   const login = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      console.log("User logged in:", result.user);
-      window.location.href = "/dashboard";
-    } catch (error) {
-      console.error("Login failed:", error);
-      alert(error.message);
-    }
+    await signInWithPopup(auth, provider);
+    window.location.href = "/dashboard";
   };
 
   return (
-    <div style={{ padding: 40 }}>
-      <h2>Login</h2>
-      <button onClick={login}>Google Sign-In</button>
+    <div className="login">
+      <div className="card login-card">
+        <h2>Finsage AI</h2>
+        <p className="text-muted">
+          Learn. Track. Invest — intelligently.
+        </p>
+        <button className="primary" onClick={login}>
+          Continue with Google
+        </button>
+      </div>
     </div>
   );
 }
