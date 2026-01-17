@@ -1,6 +1,5 @@
 import express from "express";
 import { chatAgent } from "../agents/chatAgent.js";
-import { getLessonMemory } from "../services/memoryService.js";
 
 const router = express.Router();
 
@@ -8,7 +7,7 @@ router.post("/mogul", async (req, res) => {
   try {
     const { mogul, message } = req.body;
 
-    const reply = await chatWithMogul({
+    const reply = await chatAgent({
       mogul,
       message,
     });
