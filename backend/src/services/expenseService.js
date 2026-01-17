@@ -27,6 +27,20 @@ export async function getSheetData(sheetId) {
   return txs.docs.map((d) => d.data());
 }
 
+export async function getOrCreateExpenseSheet(sheetId) {
+  const ref = db.collection("expenses").doc(sheetId);
+  const snap = await ref.get();
+
+  if (!snap.exists) {
+    await ref.set({
+      transactions: [],
+      createdAt: new Date(),
+    });
+  }
+
+  return ref;
+}
+
 export async function analyzeExpenses(sheetId) {
   const txs = await getSheetData(sheetId);
   return expenseAgent(txs);
