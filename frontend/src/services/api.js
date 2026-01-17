@@ -1,4 +1,4 @@
-const API_BASE = "https://YOUR-RENDER-URL.onrender.com";
+const API_BASE = "https://finsage-ej63.onrender.com";
 
 export async function analyze(payload, token) {
   const res = await fetch(`${API_BASE}/analyze`, {
