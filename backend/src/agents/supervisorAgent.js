@@ -1,5 +1,4 @@
 import { expenseAgent } from "./expenseAgent.js";
-import { portfolioAgent } from "./portfolioAgent.js";
 import { lessonAgent } from "./lessonAgent.js";
 import { getUserMemory, saveUserMemory } from "../memory/memoryService.js";
 import { summarizeForMemory } from "../memory/memorySummarizer.js";
@@ -15,15 +14,7 @@ export async function supervisorAgent(userId, payload) {
       spendingBehavior: await summarizeForMemory(insight, "spending")
     });
   }
-
-  if (payload.portfolio) {
-    const insight = await portfolioAgent(payload.portfolio, memory);
-    result.portfolioInsight = insight;
-    await saveUserMemory(userId, {
-      investingStyle: await summarizeForMemory(insight, "investing")
-    });
-  }
-
+  
   if (payload.lesson) {
     result.lesson = await lessonAgent(payload.lesson);
   }

@@ -17,7 +17,6 @@ export default function Navbar() {
 
       <nav>
         <Link to="/dashboard">Dashboard</Link>
-        <Link to="/portfolio">Portfolio</Link>
         <Link to="/expenses">Expenses</Link>
         <Link to="/lessons">Lessons</Link>
       </nav>
