@@ -22,29 +22,29 @@ FinSage bridges this gap by combining action (expense tracking) with education (
 
 # ✨ Key Features
 1. 💸 Expense & Income Tracking
-Add income and expenses in real time
-Automatic Firestore persistence
-Category-wise expense breakdown
-AI-generated recommendations to reduce overspending
+ * Add income and expenses in real time
+ * Automatic Firestore persistence
+ * Category-wise expense breakdown
+ * AI-generated recommendations to reduce overspending
 2. 📊 Financial Dashboard
-Net balance (Income − Expenses)
-Monthly summaries
-Visual insights for better money decisions
-Designed as a personal “financial command center”
+ * Net balance (Income − Expenses)
+ * Monthly summaries
+ * Visual insights for better money decisions
+ * Designed as a personal “financial command center”
 3. 📘 Gamified Financial Learning
-Choose a finance mogul (Buffett, Munger, Graham, etc.)
-Choose difficulty level
-AI generates structured lessons
-Lessons adapt over time using agent memory
+ * Choose a finance mogul (Buffett, Munger, Graham, etc.)
+ * Choose difficulty level
+ * AI generates structured lessons
+ * Lessons adapt over time using agent memory
 4. 🔥 Streaks, XP & Badges
-Daily lesson streaks
-XP-based progression
-Achievement badges to encourage consistency
+ * Daily lesson streaks
+ * XP-based progression
+ * Achievement badges to encourage consistency
 5. 💬 Chat With Finance Legends (Gemini-Powered)
-Ask questions in natural language
-Responses styled after legendary investors
-Context-aware conversations
-No generic AI answers
+ * Ask questions in natural language
+ * Responses styled after legendary investors
+ * Context-aware conversations
+ * No generic AI answers
 
 # 🧠 Agentic AI Architecture
 FinSage uses Agentic AI patterns, where:
@@ -55,20 +55,20 @@ FinSage uses Agentic AI patterns, where:
 
 #🛠️ Tech Stack
 1. Frontend
-React + Vite
-React Router
-Modern CSS (custom, no heavy UI frameworks)
+ * React + Vite
+ * React Router
+ * Modern CSS (custom, no heavy UI frameworks)
 2. Backend
-Node.js (ES Modules)
-Express.js
-Modular service & agent architecture
+ * Node.js (ES Modules)
+ * Express.js
+ * Modular service & agent architecture
 3. AI
-Google Gemini API
-Prompt-engineered personalities
-Rule-based + AI hybrid logic
+ * Google Gemini API
+ * Prompt-engineered personalities
+ * Rule-based + AI hybrid logic
 4. Database & Auth
-Firebase Firestore
-Firebase Authentication
+ * Firebase Firestore
+ * Firebase Authentication
 5. Deployment
-Render (Frontend & Backend)
-Environment-based configuration
+ * Render (Frontend & Backend)
+ * Environment-based configuration
