@@ -19,17 +19,20 @@ router.post("/transaction", async (req, res) => {
 });
 
 router.get("/:sheetId/analyze", async (req, res) => {
+  console.log("Expenses analyze hit:", req.params.sheetId);
+
   res.json({
     totals: {
-      Food: 0,
-      Transport: 0,
-      Shopping: 0,
+      Food: 1200,
+      Transport: 600,
+      Shopping: 900,
     },
-    totalExpense: 0,
+    totalExpense: 2700,
     recommendations: [
-      "Add expenses to unlock AI insights.",
-      "Track food spending daily.",
+      "Reduce food delivery by 20%",
+      "Use public transport twice a week",
     ],
   });
 });
+
 export default router;
