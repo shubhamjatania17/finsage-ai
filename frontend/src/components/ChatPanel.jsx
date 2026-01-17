@@ -11,7 +11,12 @@ const MOGULS = [
 
 export default function ChatPanel({ onClose }) {
   const [mogul, setMogul] = useState(MOGULS[0]);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      role: "assistant",
+      text: `Hi, I’m ${MOGULS[0]}. Ask me anything about money, investing, or decisions you’re unsure about.`,
+    },
+  ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -33,10 +38,10 @@ export default function ChatPanel({ onClose }) {
         ...m,
         { role: "assistant", text: reply.message || reply },
       ]);
-    } catch (e) {
+    } catch {
       setMessages((m) => [
         ...m,
-        { role: "assistant", text: "Something went wrong." },
+        { role: "assistant", text: "I need a moment to think about that." },
       ]);
     }
 
@@ -44,83 +49,50 @@ export default function ChatPanel({ onClose }) {
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: "90px",
-        right: "24px",
-        width: "360px",
-        maxHeight: "70vh",
-        background: "#0f172a",
-        border: "1px solid #1f2937",
-        borderRadius: "14px",
-        display: "flex",
-        flexDirection: "column",
-        zIndex: 1000,
-      }}
-    >
+    <div className="chat-panel">
       {/* Header */}
-      <div
-        style={{
-          padding: "0.8rem 1rem",
-          borderBottom: "1px solid #1f2937",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+      <div className="chat-header">
         <select
           value={mogul}
           onChange={(e) => setMogul(e.target.value)}
-          style={{ background: "#020617", color: "white" }}
         >
           {MOGULS.map((m) => (
             <option key={m}>{m}</option>
           ))}
         </select>
 
-        <button onClick={onClose}>✖</button>
+        <button className="chat-close" onClick={onClose}>
+          ✕
+        </button>
       </div>
 
       {/* Messages */}
-      <div
-        style={{
-          padding: "1rem",
-          flex: 1,
-          overflowY: "auto",
-          fontSize: "0.9rem",
-        }}
-      >
+      <div className="chat-messages">
         {messages.map((m, i) => (
           <div
             key={i}
-            style={{
-              marginBottom: "0.8rem",
-              color: m.role === "user" ? "#38bdf8" : "#e5e7eb",
-            }}
+            className={`chat-bubble ${m.role}`}
           >
-            <strong>{m.role === "user" ? "You" : mogul}:</strong>{" "}
-            {m.text}
+            <span>{m.text}</span>
           </div>
         ))}
 
-        {loading && <p>Thinking…</p>}
+        {loading && (
+          <div className="chat-bubble assistant typing">
+            <span>Thinking…</span>
+          </div>
+        )}
       </div>
 
       {/* Input */}
-      <div style={{ padding: "0.8rem", borderTop: "1px solid #1f2937" }}>
+      <div className="chat-input">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask your mentor…"
-          style={{
-            width: "100%",
-            padding: "0.6rem",
-            borderRadius: "8px",
-            border: "none",
-          }}
+          placeholder={`Ask ${mogul}…`}
           onKeyDown={(e) => e.key === "Enter" && send()}
         />
+        <button onClick={send}>➤</button>
       </div>
     </div>
   );
