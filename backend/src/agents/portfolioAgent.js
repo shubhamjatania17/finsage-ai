@@ -1,6 +1,6 @@
 import { callGemini } from "../services/geminiService.js";
 
-export async function analyzePortfolio(portfolio) {
+export async function portfolioAgent(portfolio) {
   const prompt = `
 You are a value investing expert inspired by Warren Buffett.
 
