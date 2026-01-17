@@ -1,6 +1,6 @@
 import { callGemini } from "../services/geminiService.js";
 
-export async function generateLessonAgent({
+export async function lessonAgent({
   mogul,
   difficulty,
   memory,
