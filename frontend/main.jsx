@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import Login from "./pages/Login.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
-import Portfolio from "./pages/Portfolio.jsx";
-import Expenses from "./pages/Expenses.jsx";
+import Login from "./src/pages/Login.jsx";
+import Dashboard from "./src/pages/Dashboard.jsx";
+import Portfolio from "./src/pages/Portfolio.jsx";
+import Expenses from "./src/pages/Expenses.jsx";
 
 export default function App() {
   return (
