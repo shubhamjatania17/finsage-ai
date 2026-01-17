@@ -31,17 +31,5 @@ router.get("/:sheetId/analyze", async (req, res) => {
       "Track food spending daily.",
     ],
   });
-  try {
-    const { sheetId } = req.params;
-    const analysis = await analyzeExpenses(sheetId);
-    res.json(analysis);
-  } catch (err) {
-    console.error("Expense analyze error:", err);
-    res.status(500).json({
-      totals: {},
-      totalExpense: 0,
-      recommendations: ["Unable to analyze expenses right now."],
-    });
-  }
 });
 export default router;
