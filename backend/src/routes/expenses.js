@@ -18,14 +18,25 @@ router.post("/transaction", async (req, res) => {
   res.json({ success: true });
 });
 
-router.get("/:sheetId", async (req, res) => {
-  const data = await getSheetData(req.params.sheetId);
-  res.json(data);
-});
-
 router.get("/:sheetId/analyze", async (req, res) => {
-  const analysis = await analyzeExpenses(req.params.sheetId);
-  res.json(analysis);
-});
+  try {
+    const analysis = await analyzeExpenses(req.params.sheetId);
 
+    // Always return something
+    res.json(
+      analysis || {
+        totals: {},
+        totalExpense: 0,
+        recommendations: ["Start adding expenses to see insights."],
+      }
+    );
+  } catch (err) {
+    console.error("Expense analyze error:", err);
+    res.status(500).json({
+      totals: {},
+      totalExpense: 0,
+      recommendations: ["Unable to analyze expenses right now."],
+    });
+  }
+});
 export default router;
