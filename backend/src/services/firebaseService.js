@@ -10,4 +10,6 @@ if (!admin.apps.length) {
   });
 }
 
+console.log("PRIVATE KEY EXISTS:", !!process.env.FIREBASE_PRIVATE_KEY);
+
 export const db = admin.firestore();
