@@ -1,3 +1,4 @@
+import React from "react";
 import { analyze } from "../services/api";
 import { auth } from "../firebase";
 
