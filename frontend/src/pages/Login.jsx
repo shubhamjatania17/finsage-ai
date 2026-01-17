@@ -1,20 +1,24 @@
 import React from "react";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const login = async () => {
-    await signInWithPopup(auth, provider);
-    window.location.href = "/dashboard";
+    try {
+      await signInWithPopup(auth, provider);
+      navigate("/dashboard");
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
     <div className="login">
       <div className="card login-card">
         <h2>Finsage AI</h2>
-        <p className="text-muted">
-          Learn. Track. Invest — intelligently.
-        </p>
         <button className="primary" onClick={login}>
           Continue with Google
         </button>
