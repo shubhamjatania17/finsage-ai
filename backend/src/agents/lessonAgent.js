@@ -1,18 +1,34 @@
-export async function createLesson({ mogul, difficulty, memory }) {
+import { callGemini } from "../services/geminiService.js";
+
+export async function generateLessonAgent({
+  mogul,
+  difficulty,
+  memory,
+}) {
   const prompt = `
-You are a financial mentor inspired by ${mogul}.
+You are a financial teacher inspired by ${mogul}.
 
 Difficulty: ${difficulty}
 
-User memory:
+User learning memory:
 ${JSON.stringify(memory)}
 
-Create:
-- Title
-- Short quote (style of ${mogul})
-- Clear explanation
-- Practical takeaway
+Create a lesson with:
+1. Title
+2. Quote (style of ${mogul})
+3. Explanation (simple, practical)
+4. Key takeaway
+
+Return JSON only:
+{
+  "title": "",
+  "quote": "",
+  "explanation": "",
+  "takeaway": ""
+}
 `;
 
-  // Gemini call here
+  const raw = await callGemini(prompt, { temperature: 0.5 });
+
+  return JSON.parse(raw);
 }

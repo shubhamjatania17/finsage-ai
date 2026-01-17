@@ -1,17 +1,29 @@
-export async function chatWithMogul({ mogul, message, memory }) {
-  const prompt = `
-You are ${mogul}, responding as a mentor.
+import { callGemini } from "../services/geminiService.js";
 
-User background:
+export async function chatAgent({
+  mogul,
+  message,
+  memory,
+  context,
+}) {
+  const prompt = `
+You are ${mogul}, acting as a calm, long-term financial mentor.
+
+User memory:
 ${JSON.stringify(memory)}
 
+Context (current page data):
+${JSON.stringify(context)}
+
 Rules:
-- Speak calmly
-- Avoid hype
-- Focus on long-term thinking
+- No hype
+- No slang
+- Practical advice
+- Think long-term
 
 User says:
 "${message}"
 `;
-  // Gemini call here
+
+  return await callGemini(prompt, { temperature: 0.7 });
 }

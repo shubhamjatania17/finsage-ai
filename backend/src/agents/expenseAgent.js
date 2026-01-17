@@ -1,31 +1,24 @@
-export function expenseAgent(transactions) {
-  const totals = {};
-  let totalExpense = 0;
+import { callGemini } from "../services/geminiService.js";
 
-  transactions.forEach((t) => {
-    if (t.type === "expense") {
-      totalExpense += t.amount;
-      totals[t.category] = (totals[t.category] || 0) + t.amount;
-    }
-  });
+export async function expenseAgent(transactions) {
+  const prompt = `
+You are a personal finance coach.
 
-  const recommendations = [];
+User expenses:
+${JSON.stringify(transactions)}
 
-  for (const [category, amount] of Object.entries(totals)) {
-    if (amount > totalExpense * 0.25) {
-      recommendations.push(
-        `You are spending heavily on ${category}. Consider reducing it by 10–15%.`
-      );
-    }
-  }
+Analyze:
+1. Top overspending categories
+2. Where money can be cut
+3. How much to redirect to savings/investments
 
-  recommendations.push(
-    "Redirect saved money into low-cost index funds or emergency savings."
-  );
+Return JSON only:
+{
+  "summary": "",
+  "recommendations": []
+}
+`;
 
-  return {
-    totals,
-    totalExpense,
-    recommendations,
-  };
+  const raw = await callGemini(prompt, { temperature: 0.6 });
+  return JSON.parse(raw);
 }
