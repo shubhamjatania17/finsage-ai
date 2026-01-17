@@ -19,17 +19,22 @@ router.post("/transaction", async (req, res) => {
 });
 
 router.get("/:sheetId/analyze", async (req, res) => {
+  res.json({
+    totals: {
+      Food: 0,
+      Transport: 0,
+      Shopping: 0,
+    },
+    totalExpense: 0,
+    recommendations: [
+      "Add expenses to unlock AI insights.",
+      "Track food spending daily.",
+    ],
+  });
   try {
-    const analysis = await analyzeExpenses(req.params.sheetId);
-
-    // Always return something
-    res.json(
-      analysis || {
-        totals: {},
-        totalExpense: 0,
-        recommendations: ["Start adding expenses to see insights."],
-      }
-    );
+    const { sheetId } = req.params;
+    const analysis = await analyzeExpenses(sheetId);
+    res.json(analysis);
   } catch (err) {
     console.error("Expense analyze error:", err);
     res.status(500).json({
