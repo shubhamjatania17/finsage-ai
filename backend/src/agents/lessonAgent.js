@@ -1,8 +1,18 @@
-import { runGemini } from "../services/geminiService.js";
+export async function createLesson({ mogul, difficulty, memory }) {
+  const prompt = `
+You are a financial mentor inspired by ${mogul}.
 
-export async function lessonAgent(topic) {
-  return runGemini(
-    "Teach finance as a Duolingo-style micro lesson.",
-    topic
-  );
+Difficulty: ${difficulty}
+
+User memory:
+${JSON.stringify(memory)}
+
+Create:
+- Title
+- Short quote (style of ${mogul})
+- Clear explanation
+- Practical takeaway
+`;
+
+  // Gemini call here
 }

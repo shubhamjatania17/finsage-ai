@@ -1,13 +1,10 @@
-const API_BASE = "https://finsage-ej63.onrender.com";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
-export async function analyze(payload, token) {
-  const res = await fetch(`${API_BASE}/analyze`, {
+export async function generateLesson(payload) {
+  const res = await fetch(`${API_BASE}/lessons/generate`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(payload)
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
   });
 
   return res.json();
