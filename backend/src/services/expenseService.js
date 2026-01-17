@@ -1,47 +1,113 @@
 import { db } from "./firebaseService.js";
-import { expenseAgent } from "../agents/expenseAgent.js";
 
-export async function createSheet({ uid, name }) {
-  const ref = db.collection("expenseSheets").doc();
-  const sheet = {
-    uid,
-    name,
-    createdAt: new Date(),
-    totalIncome: 0,
-    totalExpense: 0,
-  };
-  await ref.set(sheet);
-  return { id: ref.id, ...sheet };
-}
-
-export async function addTransaction(tx) {
-  await db.collection("transactions").add(tx);
-}
-
-export async function getSheetData(sheetId) {
-  const txs = await db
-    .collection("transactions")
-    .where("sheetId", "==", sheetId)
-    .get();
-
-  return txs.docs.map((d) => d.data());
-}
-
-export async function getOrCreateExpenseSheet(sheetId) {
-  const ref = db.collection("expenses").doc(sheetId);
+/**
+ * Get or create default expense sheet
+ */
+export async function getOrCreateSheet(sheetId, uid) {
+  const ref = db.collection("expenseSheets").doc(sheetId);
   const snap = await ref.get();
 
   if (!snap.exists) {
     await ref.set({
-      transactions: [],
+      uid,
       createdAt: new Date(),
+      transactions: [],
     });
   }
 
   return ref;
 }
 
+/**
+ * Create a new sheet explicitly (optional)
+ */
+export async function createSheet({ uid, name }) {
+  const sheetId = `${uid}-${name || "default"}`;
+  const ref = db.collection("expenseSheets").doc(sheetId);
+
+  await ref.set({
+    uid,
+    createdAt: new Date(),
+    transactions: [],
+  });
+
+  return { sheetId };
+}
+
+/**
+ * Add income or expense
+ */
+export async function addTransaction({
+  sheetId,
+  type,
+  amount,
+  category,
+  note,
+  date,
+}) {
+  const ref = db.collection("expenseSheets").doc(sheetId);
+  const snap = await ref.get();
+
+  if (!snap.exists) {
+    throw new Error("Expense sheet not found");
+  }
+
+  const data = snap.data();
+
+  data.transactions.push({
+    type,
+    amount: Number(amount),
+    category,
+    note: note || "",
+    date: date || new Date().toISOString(),
+  });
+
+  await ref.update({ transactions: data.transactions });
+}
+
+/**
+ * Analyze expenses (NO Gemini yet, pure logic)
+ */
 export async function analyzeExpenses(sheetId) {
-  const txs = await getSheetData(sheetId);
-  return expenseAgent(txs);
+  const ref = db.collection("expenseSheets").doc(sheetId);
+  const snap = await ref.get();
+
+  if (!snap.exists) {
+    throw new Error("Expense sheet not found");
+  }
+
+  const { transactions } = snap.data();
+
+  const totals = {};
+  let totalExpense = 0;
+
+  for (const t of transactions) {
+    if (t.type === "expense") {
+      totals[t.category] = (totals[t.category] || 0) + t.amount;
+      totalExpense += t.amount;
+    }
+  }
+
+  // Basic smart recommendations
+  const recommendations = [];
+
+  for (const [category, value] of Object.entries(totals)) {
+    if (value > totalExpense * 0.3) {
+      recommendations.push(
+        `High spending detected in ${category}. Consider reducing it by 10–20%.`
+      );
+    }
+  }
+
+  if (recommendations.length === 0) {
+    recommendations.push(
+      "Your spending looks balanced. Keep tracking consistently."
+    );
+  }
+
+  return {
+    totals,
+    totalExpense,
+    recommendations,
+  };
 }

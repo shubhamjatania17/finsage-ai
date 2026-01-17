@@ -2,7 +2,6 @@ import express from "express";
 import {
   createSheet,
   addTransaction,
-  getSheetData,
   analyzeExpenses,
 } from "../services/expenseService.js";
 
@@ -19,20 +18,19 @@ router.post("/transaction", async (req, res) => {
 });
 
 router.get("/:sheetId/analyze", async (req, res) => {
-  console.log("Expenses analyze hit:", req.params.sheetId);
+  try {
+    console.log("Expenses analyze hit:", req.params.sheetId);
 
-  res.json({
-    totals: {
-      Food: 1200,
-      Transport: 600,
-      Shopping: 900,
-    },
-    totalExpense: 2700,
-    recommendations: [
-      "Reduce food delivery by 20%",
-      "Use public transport twice a week",
-    ],
-  });
+    const result = await analyzeExpenses(req.params.sheetId);
+    res.json(result);
+  } catch (err) {
+    console.error("Analyze error:", err.message);
+    res.status(500).json({
+      totals: {},
+      totalExpense: 0,
+      recommendations: ["Unable to load expenses right now."],
+    });
+  }
 });
 
 export default router;
