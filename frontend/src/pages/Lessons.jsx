@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useSearchParams } from "react-router-dom";
 import { generateLesson } from "../services/api";
 
 const MOGULS = [
@@ -12,23 +13,29 @@ const MOGULS = [
 const DIFFICULTY = ["Beginner", "Intermediate", "Advanced"];
 
 export default function Lessons() {
-  const [step, setStep] = useState(1);
-  const [mogul, setMogul] = useState(null);
-  const [difficulty, setDifficulty] = useState(null);
-  const [lesson, setLesson] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [params, setParams] = useSearchParams();
+  const step = params.get("step") || "mogul";
+  const mogul = params.get("mogul");
+  const difficulty = params.get("difficulty");
 
-  const startLesson = async () => {
+  const [lesson, setLesson] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+
+  const startLesson = async (selectedDifficulty) => {
     setLoading(true);
+    setParams({
+      step: "lesson",
+      mogul,
+      difficulty: selectedDifficulty,
+    });
 
     const result = await generateLesson({
       mogul,
-      difficulty,
+      difficulty: selectedDifficulty,
     });
 
     setLesson(result);
     setLoading(false);
-    setStep(3);
   };
 
   return (
@@ -36,7 +43,7 @@ export default function Lessons() {
       <h1>AI Financial Lessons</h1>
 
       {/* STEP 1: Choose Mogul */}
-      {step === 1 && (
+      {step === "mogul" && (
         <>
           <h3>Choose a finance legend</h3>
           <div className="grid">
@@ -44,10 +51,9 @@ export default function Lessons() {
               <div
                 key={m}
                 className="card"
-                onClick={() => {
-                  setMogul(m);
-                  setStep(2);
-                }}
+                onClick={() =>
+                  setParams({ step: "difficulty", mogul: m })
+                }
               >
                 <h3>{m}</h3>
                 <p className="text-muted">
@@ -60,7 +66,7 @@ export default function Lessons() {
       )}
 
       {/* STEP 2: Choose Difficulty */}
-      {step === 2 && (
+      {step === "difficulty" && (
         <>
           <h3>Select difficulty</h3>
           <div className="grid">
@@ -68,10 +74,7 @@ export default function Lessons() {
               <div
                 key={level}
                 className="card"
-                onClick={() => {
-                  setDifficulty(level);
-                  startLesson();
-                }}
+                onClick={() => startLesson(level)}
               >
                 <h3>{level}</h3>
               </div>
@@ -81,9 +84,9 @@ export default function Lessons() {
       )}
 
       {/* STEP 3: Lesson */}
-      {step === 3 && (
+      {step === "lesson" && (
         <>
-          {loading ? (
+          {loading || !lesson ? (
             <p>Generating lesson with AI…</p>
           ) : (
             <div className="lesson-card">
@@ -93,7 +96,6 @@ export default function Lessons() {
               </p>
 
               <blockquote>{lesson.quote}</blockquote>
-
               <p>{lesson.explanation}</p>
 
               <div className="takeaway">
@@ -103,12 +105,11 @@ export default function Lessons() {
 
               <button
                 className="primary"
-                onClick={() => {
-                  setStep(1);
-                  setLesson(null);
-                }}
+                onClick={() =>
+                  setParams({ step: "mogul" })
+                }
               >
-                Next Lesson →
+                Start Another Lesson →
               </button>
             </div>
           )}
