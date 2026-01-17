@@ -71,24 +71,10 @@ export async function createExpenseSheet({ uid, name }) {
   });
 }
 
-export async function addTransaction({
-  sheetId,
-  type, // "income" | "expense"
-  amount,
-  category,
-  note,
-  date,
-}) {
+export async function addTransaction(data) {
   return jsonRequest(`${API_BASE}/expenses/transaction`, {
     method: "POST",
-    body: JSON.stringify({
-      sheetId,
-      type,
-      amount,
-      category,
-      note,
-      date,
-    }),
+    body: JSON.stringify(data),
   });
 }
 
@@ -130,9 +116,3 @@ export async function updateXP(uid, payload) {
   });
 }
 
-export async function addTransaction(data) {
-  return jsonRequest(`${API_BASE}/expenses/transaction`, {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
-}
