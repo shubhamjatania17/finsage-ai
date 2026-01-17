@@ -1,12 +1,22 @@
 import "dotenv/config";
-import app from "./app.js";
+import express from "express";
+import cors from "cors";
+import expensesRouter from "./routes/expenses.js";
+import chatRouter from "./routes/chat.js";
+import analyzeRouter from "./routes/analyze.js";
+
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+// 🔥 THIS LINE IS REQUIRED
+app.use("/expenses", expensesRouter);
+app.use("/chat", chatRouter);
+app.use("/analyze", analyzeRouter);
 
 const PORT = process.env.PORT || 8080;
-app.use((req, res, next) => {
-  console.log("REQ:", req.method, req.url);
-  next();
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () =>
+  console.log(`Server running on port ${PORT}`)
+);
