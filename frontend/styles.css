@@ -365,4 +365,24 @@ button {
 .chat-input button:hover {
   filter: brightness(1.05);
 }
+.toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.toggle button {
+  flex: 1;
+  background: #020617;
+  color: #e5e7eb;
+  border: 1px solid #1f2937;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.toggle button.active {
+  background: #38bdf8;
+  color: #020617;
+  font-weight: 600;
+}
 

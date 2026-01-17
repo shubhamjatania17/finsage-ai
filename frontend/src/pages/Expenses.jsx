@@ -1,46 +1,43 @@
 import React, { useEffect, useState } from "react";
+import ExpenseForm from "../components/ExpenseForm";
 import ExpenseChart from "../components/ExpenseChart";
 import { getExpenseAnalysis } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
 export default function Expenses() {
   const { user } = useAuth();
-
   const [analysis, setAnalysis] = useState(null);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const load = async () => {
     if (!user) return;
+    try {
+      const data = await getExpenseAnalysis(`${user.uid}-default`);
+      setAnalysis(data);
+      setError(null);
+    } catch {
+      setError("Unable to load expenses.");
+    }
+  };
 
-    const sheetId = `${user.uid}-default`; // TEMP default
-
-    getExpenseAnalysis(sheetId)
-      .then(setAnalysis)
-      .catch((err) => {
-        console.error("Expense error:", err);
-        setError("Unable to load expenses right now.");
-      });
+  useEffect(() => {
+    load();
   }, [user]);
 
-  if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
-  }
-
-  if (!analysis) {
-    return <p>Loading expenses…</p>;
-  }
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (!analysis) return <p>Loading expenses…</p>;
 
   return (
     <div>
-      <h1>Expense Sheet</h1>
+      <h1>Expenses</h1>
 
       <div className="grid">
+        <ExpenseForm onAdded={load} />
+
         <div className="card">
           <h3>Total Expense</h3>
           <div className="stat">₹{analysis.totalExpense}</div>
-        </div>
 
-        <div className="card">
           <ExpenseChart data={analysis.totals} />
         </div>
       </div>

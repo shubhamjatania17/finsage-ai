@@ -129,3 +129,10 @@ export async function updateXP(uid, payload) {
     body: JSON.stringify({ uid, ...payload }),
   });
 }
+
+export async function addTransaction(data) {
+  return jsonRequest(`${API_BASE}/expenses/transaction`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
