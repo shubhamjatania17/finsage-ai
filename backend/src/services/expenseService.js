@@ -1,119 +1,127 @@
 import { db } from "./firebaseService.js";
 
 /**
- * Get or create default expense sheet
+ * Create a new expense sheet
  */
-export async function getOrCreateSheet(sheetId, uid) {
+export async function createSheet({ uid, name }) {
+  const sheetId = `${uid}-default`;
+
   const ref = db.collection("expenseSheets").doc(sheetId);
   const snap = await ref.get();
 
   if (!snap.exists) {
     await ref.set({
       uid,
-      createdAt: new Date(),
+      name: name || "Default Sheet",
       transactions: [],
+      createdAt: new Date(),
     });
   }
-
-  return ref;
-}
-
-/**
- * Create a new sheet explicitly (optional)
- */
-export async function createSheet({ uid, name }) {
-  const sheetId = `${uid}-${name || "default"}`;
-  const ref = db.collection("expenseSheets").doc(sheetId);
-
-  await ref.set({
-    uid,
-    createdAt: new Date(),
-    transactions: [],
-  });
 
   return { sheetId };
 }
 
 /**
- * Add income or expense
+ * Add income or expense transaction
  */
 export async function addTransaction({
   sheetId,
-  type,
+  type, // "income" | "expense"
   amount,
   category,
   note,
   date,
 }) {
+  if (!sheetId || !type || !amount) {
+    throw new Error("Missing required transaction fields");
+  }
+
   const ref = db.collection("expenseSheets").doc(sheetId);
   const snap = await ref.get();
 
-  if (!snap.exists) {
-    throw new Error("Expense sheet not found");
-  }
-
-  const data = snap.data();
-
-  data.transactions.push({
-    type,
-    amount: Number(amount),
-    category,
-    note: note || "",
-    date: date || new Date().toISOString(),
-  });
-
-  await ref.update({ transactions: data.transactions });
-}
-
-/**
- * Analyze expenses (NO Gemini yet, pure logic)
- */
-export async function analyzeExpenses(sheetId) {
-  const ref = db.collection("expenseSheets").doc(sheetId);
-  let snap = await ref.get();
-
-  // 🔥 AUTO-CREATE SHEET IF MISSING
+  // Auto-create sheet if missing
   if (!snap.exists) {
     await ref.set({
       transactions: [],
       createdAt: new Date(),
     });
+  }
 
+  const transaction = {
+    type,
+    amount: Number(amount),
+    category: category || (type === "income" ? "Income" : "Other"),
+    note: note || "",
+    date: date ? new Date(date) : new Date(),
+  };
+
+  await ref.update({
+    transactions: db.constructor.FieldValue.arrayUnion(transaction),
+  });
+
+  return transaction;
+}
+
+/**
+ * Analyze expenses & income (used by dashboard + expenses page)
+ */
+export async function analyzeExpenses(sheetId) {
+  const ref = db.collection("expenseSheets").doc(sheetId);
+  let snap = await ref.get();
+
+  // 🔥 Auto-create sheet if missing (prevents crashes)
+  if (!snap.exists) {
+    await ref.set({
+      transactions: [],
+      createdAt: new Date(),
+    });
     snap = await ref.get();
   }
 
-  const { transactions } = snap.data();
+  const { transactions = [] } = snap.data();
 
-  const totals = {};
   let totalExpense = 0;
+  let totalIncome = 0;
+  const totals = {};
 
   for (const t of transactions) {
     if (t.type === "expense") {
-      totals[t.category] = (totals[t.category] || 0) + t.amount;
       totalExpense += t.amount;
+      totals[t.category] = (totals[t.category] || 0) + t.amount;
+    }
+
+    if (t.type === "income") {
+      totalIncome += t.amount;
     }
   }
 
+  // 🔮 Simple rule-based recommendations (Gemini can enhance later)
   const recommendations = [];
 
   if (totalExpense === 0) {
     recommendations.push(
-      "No expenses yet. Start adding expenses to unlock insights."
+      "No expenses recorded yet. Start tracking to unlock insights."
     );
   } else {
     for (const [category, value] of Object.entries(totals)) {
       if (value > totalExpense * 0.3) {
         recommendations.push(
-          `High spending detected in ${category}. Consider reducing it by 10–20%.`
+          `High spending in ${category}. Consider reducing it by 10–20%.`
         );
       }
+    }
+
+    if (totalIncome > 0 && totalExpense > totalIncome) {
+      recommendations.push(
+        "Your expenses exceed your income. Review discretionary spending."
+      );
     }
   }
 
   return {
-    totals,
-    totalExpense,
+    totals,          // category breakdown
+    totalExpense,   // total expenses
+    totalIncome,    // total income
     recommendations,
   };
 }
-

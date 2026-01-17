@@ -385,4 +385,48 @@ button {
   color: #020617;
   font-weight: 600;
 }
+.stat-card {
+  text-align: center;
+}
+
+.stat-card.green {
+  border-left: 4px solid #22c55e;
+}
+
+.stat-card.blue {
+  border-left: 4px solid #38bdf8;
+}
+
+.streak-grid {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 6px;
+  margin-top: 1rem;
+}
+
+.streak-day {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: #1f2937;
+}
+
+.streak-day.active {
+  background: #22c55e;
+}
+
+.badge-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background: #020617;
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
 
