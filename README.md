@@ -53,7 +53,7 @@ FinSage uses Agentic AI patterns, where:
 3. Firebase persists long-term user memory
 4. Agents adapt future responses based on user behavior
 
-#🛠️ Tech Stack
+# 🛠️ Tech Stack
 1. Frontend
  * React + Vite
  * React Router
