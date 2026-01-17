@@ -7,18 +7,15 @@ export default function Login() {
   const navigate = useNavigate();
 
   const login = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-      navigate("/dashboard");
-    } catch (err) {
-      alert(err.message);
-    }
+    await signInWithPopup(auth, provider);
+    navigate("/dashboard");
   };
 
   return (
     <div className="login">
       <div className="card login-card">
-        <h2>Finsage AI</h2>
+        <h2>Welcome back</h2>
+        <p>Sign in to continue to FinSage</p>
         <button className="primary" onClick={login}>
           Continue with Google
         </button>
