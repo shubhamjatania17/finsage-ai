@@ -123,3 +123,94 @@ button {
   width: 380px;
   text-align: center;
 }
+/* =========================
+   Lessons (Duolingo Style)
+========================= */
+
+.lesson-header {
+  margin-bottom: 2.5rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #1f2937;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #38bdf8);
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* Lesson path */
+
+.lesson-path {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 3rem;
+}
+
+.lesson-node {
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.lesson-node:hover {
+  transform: translateY(-3px);
+}
+
+.lesson-node.locked {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.lesson-node.completed {
+  border-color: var(--success);
+}
+
+.lesson-node h3 {
+  margin-bottom: 0.5rem;
+}
+
+/* Lesson card */
+
+.lesson-card {
+  background: var(--panel);
+  border-radius: var(--radius);
+  padding: 2rem;
+  max-width: 700px;
+  box-shadow: var(--shadow);
+}
+
+.lesson-author {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.lesson-card blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  border-left: 4px solid var(--primary);
+  font-style: italic;
+}
+
+.takeaway {
+  background: rgba(56, 189, 248, 0.1);
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin: 1.5rem 0;
+}
