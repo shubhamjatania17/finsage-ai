@@ -22,7 +22,6 @@ export async function saveUserMemory(userId, memory) {
       { merge: true }
     );
 }
-import { db } from "./firebaseService.js";
 
 export async function getLessonMemory(uid) {
   const snap = await db.collection("lessonMemory").doc(uid).get();
