@@ -116,3 +116,14 @@ export async function updateXP(uid, payload) {
   });
 }
 
+// ================================
+// STOCKS ANALYSIS
+// ================================
+
+export async function analyzeStock({ stockName, reportText }) {
+  return jsonRequest(`${API_BASE}/stocks/analyze`, {
+    method: "POST",
+    body: JSON.stringify({ stockName, reportText }),
+  });
+}
+
