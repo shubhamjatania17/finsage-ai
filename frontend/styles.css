@@ -502,4 +502,99 @@ button {
   text-align: center;
   margin-top: 3rem;
 }
+.dashboard h1 {
+  margin-bottom: 1rem;
+}
+
+.dash-section {
+  margin-bottom: 2.5rem;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.stat-card {
+  padding: 1.2rem;
+  border-radius: 14px;
+  background: #020617;
+  border: 1px solid #1f2937;
+  text-align: center;
+}
+
+.stat-card.good {
+  border-left: 4px solid #22c55e;
+}
+
+.stat-card.warn {
+  border-left: 4px solid #f97316;
+}
+
+.stat-card.positive {
+  border-left: 4px solid #38bdf8;
+}
+
+.stat-card.negative {
+  border-left: 4px solid #ef4444;
+}
+
+.learning-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: #020617;
+  border-radius: 16px;
+  border: 1px solid #1f2937;
+}
+
+.streak-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.streak-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: #1f2937;
+}
+
+.streak-dot.active {
+  background: #22c55e;
+}
+
+.badge-grid {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.badge-card {
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  border: 1px solid #38bdf8;
+}
+
+.badge-card.earned {
+  color: #38bdf8;
+}
+
+.badge-card.locked {
+  color: #64748b;
+  border-color: #334155;
+}
+
+.ai-insight {
+  padding: 1.2rem;
+  background: linear-gradient(135deg, #020617, #020617cc);
+  border-left: 4px solid #38bdf8;
+  border-radius: 14px;
+  font-style: italic;
+}
 
