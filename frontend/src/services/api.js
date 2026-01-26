@@ -50,17 +50,6 @@ export async function generateQuiz({ lessonId, difficulty }) {
 }
 
 // ================================
-// CHAT WITH MOGUL
-// ================================
-
-export async function chatWithMogul({ mogul, message }) {
-  return jsonRequest(`${API_BASE}/chat/mogul`, {
-    method: "POST",
-    body: JSON.stringify({ mogul, message }),
-  });
-}
-
-// ================================
 // EXPENSE SHEETS
 // ================================
 

@@ -7,9 +7,6 @@ export default function AppLayout({ children }) {
     <div className="app">
       <Navbar />
       <main className="main">{children}</main>
-
-      {/* Global Chat */}
-      <ChatWidget />
     </div>
   );
 }
